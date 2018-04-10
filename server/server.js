@@ -15,6 +15,15 @@ app.use(express.static(publicPath));
 io.on('connection', socket => {
 	console.log('New user connected');
 
+	socket.on('createMessage', message => {
+		console.log('CLIENT create a new message: ', message);
+	});
+
+	socket.emit('newMessage', {
+		from: 'handsome guy',
+		text: 'im beautiful'
+	});
+
 	socket.on('disconnect', () => {
 		console.log('a client disconnected');
 	});
@@ -23,3 +32,12 @@ io.on('connection', socket => {
 server.listen(PORT, () => {
 	console.log('app is listening on port ' + PORT);
 });
+// socket.emit('newEmail', {
+// 	from: 'your friend',
+// 	text: 'you are awesome',
+// 	createAt: 123
+// });
+
+// socket.on('createEmail', email => {
+// 	console.log('client want to create a email: ', email);
+// });
