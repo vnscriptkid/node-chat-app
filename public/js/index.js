@@ -3,14 +3,14 @@ const socket = io();
 socket.on('connect', function() {
 	console.log('connected to the server');
 
-	socket.emit('createMessage', {
-		to: 'someone bad',
-		text: 'i hate you'
-	});
+	// socket.emit('createMessage', {
+	// 	from: 'someone bad',
+	// 	text: 'i hate you'
+	// });
 });
 
 socket.on('newMessage', function(message) {
-	console.log('SERVER someone send you a messeage: ', message);
+	console.log('SERVER someone send you a message: ', message);
 });
 
 socket.on('disconnect', function() {
