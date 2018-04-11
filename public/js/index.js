@@ -10,11 +10,38 @@ socket.on('connect', function() {
 });
 
 socket.on('newMessage', function(message) {
-	console.log('someone send you a message: ', message);
+	console.log('new message: ', message);
+	var li = jQuery('<li></li>');
+	li.text(`${message.from}: ${message.text}`);
+	jQuery('#messages').append(li);
 });
 
 socket.on('disconnect', function() {
 	console.log('disconnected from server');
+});
+
+// socket.emit(
+// 	'createMessage',
+// 	{
+// 		from: 'vnscriptkid',
+// 		text: 'hello'
+// 	},
+// 	function(data) {
+// 		console.log('Server received');
+// 		console.log(data);
+// 	}
+// );
+
+jQuery('#message-form').on('submit', function(e) {
+	e.preventDefault();
+	socket.emit(
+		'createMessage',
+		{
+			from: 'User',
+			text: jQuery('[name=message]').val()
+		},
+		function() {}
+	);
 });
 
 // socket.emit('createEmail', {

@@ -21,17 +21,19 @@ io.on('connection', socket => {
 
 	socket.broadcast.emit('newMessage', generateMessage('ADMIN', 'Someone joined'));
 
-	socket.on('createMessage', message => {
+	socket.on('createMessage', (message, callback) => {
 		console.log('CLIENT create a new message: ', message);
+		callback('This is data from server');
 		// This emit to everyone including person who createMessage
 		// io.emit('newMessage', {
 		// 	from: message.from,
 		// 	text: message.text,
 		// 	createdAt: new Date().getTime()
 		// });
+		io.emit('newMessage', generateMessage(message.from, message.text));
 
 		// This emit to everyone except for person who createMessage
-		socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
+		// socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
 	});
 
 	// socket.emit('newMessage', {
