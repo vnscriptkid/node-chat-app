@@ -32,6 +32,18 @@ socket.on('disconnect', function() {
 // 	}
 // );
 
+socket.on('newLocation', function(location) {
+	var li = jQuery('<li></li>');
+	li.text(location.from + ': ');
+	var a = jQuery(
+		`<a target="_blank" href="https://www.google.com/maps/search/${location.latitude}+${
+			location.longitude
+		}">See my location</a>`
+	);
+	li.append(a);
+	jQuery('#messages').append(li);
+});
+
 jQuery('#message-form').on('submit', function(e) {
 	e.preventDefault();
 	socket.emit(
@@ -41,6 +53,26 @@ jQuery('#message-form').on('submit', function(e) {
 			text: jQuery('[name=message]').val()
 		},
 		function() {}
+	);
+});
+
+var locationButton = jQuery('#send-location');
+locationButton.on('click', function() {
+	if (!navigator.geolocation) {
+		return alert('Geolocation not supported by your browser');
+	}
+
+	navigator.geolocation.getCurrentPosition(
+		function(position) {
+			console.log(position);
+			socket.emit('sendLocation', {
+				latitude: position.coords.latitude,
+				longitude: position.coords.longitude
+			});
+		},
+		function() {
+			alert('Unable to fetch location');
+		}
 	);
 });
 

@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const { generateMessage } = require('./utils/message');
+const { generateMessage, generateLocation } = require('./utils/message');
 
 const publicPath = path.join(__dirname, '..', 'public');
 const PORT = process.env.PORT || 3000;
@@ -34,6 +34,17 @@ io.on('connection', socket => {
 
 		// This emit to everyone except for person who createMessage
 		// socket.broadcast.emit('newMessage', generateMessage(message.from, message.text));
+	});
+
+	socket.on('sendLocation', location => {
+		// io.emit('newMessage', {
+		// 	from: 'ADMIN',
+		// 	text: `<a href="https://www.google.com/maps/search/${location.latitude}+${
+		// 		location.longitude
+		// 	}">See location</a>`.trim()
+		// });
+		// console.log('** ', typeof location.latitude);
+		io.emit('newLocation', generateLocation('ADMIN', location.latitude, location.longitude));
 	});
 
 	// socket.emit('newMessage', {
